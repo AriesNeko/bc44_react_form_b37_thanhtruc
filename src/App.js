@@ -1,11 +1,12 @@
 import logo from "./logo.svg";
 import "./App.css";
-import ManagementProduct from "./ReactForm/ManagementProduct";
+import QuanLySV from "./ReactForm/QuanLySV";
+import DanhSachSV from "./ReactForm/DanhSachSV";
 
 function App() {
   return (
-    <div>
-      <ManagementProduct />
+    <div className="container">
+      <QuanLySV />
     </div>
   );
 }
