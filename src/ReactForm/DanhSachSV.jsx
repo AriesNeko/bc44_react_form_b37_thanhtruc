@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class DanhSachSV extends Component {
   render() {
-    const { dssv } = this.props;
+    const { dssv, handleDelete } = this.props;
     return (
       <div className="bg-body-secondary m-3 border border-primary-subtle">
         <div>
@@ -28,7 +28,12 @@ export default class DanhSachSV extends Component {
                   <td>{sv.email}</td>
                   <td>
                     <button className="btn btn-warning mx-2 btn-sm">Sửa</button>
-                    <button className="btn btn-danger mx-2 btn-sm">Xóa</button>
+                    <button
+                      onClick={() => handleDelete(sv.maSV)}
+                      className="btn btn-danger mx-2 btn-sm"
+                    >
+                      Xóa
+                    </button>
                   </td>
                 </tr>
               );

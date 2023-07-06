@@ -34,7 +34,6 @@ export default class QuanLySV extends Component {
       }
     });
     return inValid;
-    console.log(Object.keys(this.state.value));
   };
 
   handleOnChange = (event) => {
@@ -49,9 +48,9 @@ export default class QuanLySV extends Component {
       // validate value nhập vào có đúng format?
       if (pattern) {
         const regex = new RegExp(pattern);
-        const inValid = regex.test(value);
-        if (!inValid) {
-          newError[name] = "Mã sinh viên không đúng định dạng";
+        const valid = regex.test(value);
+        if (!valid) {
+          newError[name] = "Vui lòng nhập đúng định dạng";
         } else {
           // có input value vào
           newError[name] = "";
@@ -62,7 +61,7 @@ export default class QuanLySV extends Component {
   };
 
   handleOnBlur = (event) => {
-    const { name, value } = event.target;
+    const { name, value, pattern } = event.target;
     const newSV = { ...this.state.value, [name]: value };
     const newError = { ...this.state.error };
     // xử lí lỗi
@@ -70,7 +69,17 @@ export default class QuanLySV extends Component {
       // Không có value
       newError[name] = "Trường này không được để trống !";
     } else {
-      newError[name] = "";
+      // validate value nhập vào có đúng format?
+      if (pattern) {
+        const regex = new RegExp(pattern);
+        const valid = regex.test(value);
+        if (!valid) {
+          newError[name] = "Vui lòng nhập đúng định dạng";
+        } else {
+          // có input value vào
+          newError[name] = "";
+        }
+      }
     }
     this.setState({ value: newSV, error: newError });
   };
@@ -79,12 +88,26 @@ export default class QuanLySV extends Component {
     event.preventDefault();
 
     // xử lí validate form
-    if (!this.formValid()) {
-      const newSV = [...this.state.dsSV, this.state.value];
-      this.setState({ dsSV: newSV });
-    }
+    // if (!this.formValid()) {
+    //   const newSV = [...this.state.dsSV, this.state.value];
+    //   this.setState({ dsSV: newSV });
+    // }
+    // console.log(this.state.value);
 
-    console.log(this.state.value);
+    let valid = true;
+    Object.values(this.state.error).forEach((sv) => {
+      if (sv.length > 0) {
+        valid = false;
+      }
+    });
+    if (valid) {
+      const newDSSV = [...this.state.dsSV, this.state.value];
+      this.setState({ dsSV: newDSSV });
+    }
+  };
+
+  handleDelete = (maSV) => {
+    console.log(maSV);
   };
 
   render() {
@@ -115,7 +138,7 @@ export default class QuanLySV extends Component {
                     // thao tác focus out
                     onBlur={this.handleOnBlur}
                     // pattern được phép nhập
-                    pattern="^[0-9]{1,5}$"
+                    pattern="\b\d{5}\b"
                   />
                 </div>
                 {error.maSV && (
@@ -156,6 +179,7 @@ export default class QuanLySV extends Component {
                     placeholder="Số điện thoại"
                     onChange={this.handleOnChange}
                     onBlur={this.handleOnBlur}
+                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
                   />
                 </div>
                 {error.soDT && (
@@ -175,6 +199,7 @@ export default class QuanLySV extends Component {
                   placeholder="Email"
                   onChange={this.handleOnChange}
                   onBlur={this.handleOnBlur}
+                  pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
                 />
                 {error.email && (
                   <span className="text text-danger">{error.email}</span>
@@ -188,7 +213,7 @@ export default class QuanLySV extends Component {
             </div>
           </div>
         </form>
-        <DanhSachSV dssv={dsSV} />
+        <DanhSachSV dssv={dsSV} handleDelete={this.handleDelete} />
       </div>
     );
   }
