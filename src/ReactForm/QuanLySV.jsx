@@ -17,12 +17,13 @@ export default class QuanLySV extends Component {
     },
     dsSV: [
       {
-        maSV: "d",
-        hoTen: "w",
-        soDT: "s",
-        email: "a",
+        maSV: "",
+        hoTen: "",
+        soDT: "",
+        email: "",
       },
     ],
+    editSV: null,
   };
 
   formValid = () => {
@@ -107,11 +108,43 @@ export default class QuanLySV extends Component {
   };
 
   handleDelete = (maSV) => {
-    console.log(maSV);
+    const timSVIndex = this.state.dsSV.findIndex((sv) => {
+      return sv.maSV === maSV;
+    });
+    if (timSVIndex !== -1) {
+      const newDSSV = [...this.state.dsSV];
+      newDSSV.splice(timSVIndex, 1);
+      this.setState({ dsSV: newDSSV });
+    }
+  };
+
+  handleEdit = (maSV) => {
+    const timSV = this.state.dsSV.find((sv) => {
+      return sv.maSV === maSV;
+    });
+    this.setState({ editSV: timSV, value: timSV });
+  };
+
+  handleUpdate = () => {
+    const timSVIndex = this.state.dsSV.findIndex((sv) => {
+      return sv.maSV === this.state.editSV.maSV;
+    });
+    const newDSSV = [...this.state.dsSV];
+    newDSSV[timSVIndex] = this.state.value;
+    this.setState({
+      dsSV: newDSSV,
+      value: {
+        maSV: "",
+        hoTen: "",
+        soDT: "",
+        email: "",
+      },
+      editSV: null,
+    });
   };
 
   render() {
-    let { value, error, dsSV } = this.state;
+    let { value, error, dsSV, editSV } = this.state;
     let { maSV, hoTen, soDT, email } = value;
     return (
       <div className="bg-body-secondary m-3 border border-primary-subtle">
@@ -139,6 +172,7 @@ export default class QuanLySV extends Component {
                     onBlur={this.handleOnBlur}
                     // pattern được phép nhập
                     pattern="\b\d{5}\b"
+                    disabled={editSV}
                   />
                 </div>
                 {error.maSV && (
@@ -207,13 +241,25 @@ export default class QuanLySV extends Component {
               </div>
             </div>
             <div class="col-12 p-2">
-              <button type="submit" class="btn btn-outline-primary">
-                Thêm Sinh Viên
-              </button>
+              {editSV ? (
+                <button
+                  type="button"
+                  onClick={this.handleUpdate}
+                  class="btn btn-outline-primary"
+                >
+                  Cập nhật
+                </button>
+              ) : (
+                <button class="btn btn-outline-primary">Thêm Sinh Viên</button>
+              )}
             </div>
           </div>
         </form>
-        <DanhSachSV dssv={dsSV} handleDelete={this.handleDelete} />
+        <DanhSachSV
+          dssv={dsSV}
+          handleDelete={this.handleDelete}
+          handleEdit={this.handleEdit}
+        />
       </div>
     );
   }
