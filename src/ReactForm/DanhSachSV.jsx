@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class DanhSachSV extends Component {
   render() {
-    const { dssv, handleDelete, handleEdit } = this.props;
+    const { dsSV, handleDelete, handleEdit } = this.props;
 
     return (
       <div className="bg-body-secondary m-3 border border-primary-subtle">
@@ -20,7 +20,7 @@ export default class DanhSachSV extends Component {
             </tr>
           </thead>
           <tbody>
-            {dssv.map((sv) => {
+            {dsSV.map((sv) => {
               return (
                 <tr key={sv.id}>
                   <th scope="row">{sv.maSV}</th>

@@ -78,8 +78,16 @@ export default class QuanLySV extends Component {
     this.setState({ value: newSV, error: newError });
   };
 
-  handleAdd = (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
+
+    const timSVIndex = this.state.dsSV.findIndex((sv) => {
+      return sv.maSV === this.state.value.maSV;
+    });
+    if (timSVIndex !== -1) {
+      alert("Mã sinh viên này đã tồn tại");
+      return;
+    }
 
     // xử lí validate form
     // if (!this.formValid()) {
@@ -94,6 +102,7 @@ export default class QuanLySV extends Component {
         valid = false;
       }
     });
+
     if (valid) {
       const newDSSV = [...this.state.dsSV, this.state.value];
       this.setState({
@@ -147,16 +156,18 @@ export default class QuanLySV extends Component {
   render() {
     let { value, error, dsSV, editSV } = this.state;
     let { maSV, hoTen, soDT, email } = value;
+    const enabled =
+      maSV.length > 0 &&
+      hoTen.length > 0 &&
+      soDT.length > 0 &&
+      email.length > 0;
+
     return (
       <div className="bg-body-secondary m-3 border border-primary-subtle">
         <div>
           <h3 className="p-2">Thông tin sinh viên</h3>
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
+        <form onSubmit={this.handleSubmit}>
           <div className="m-3">
             <div className="row p-2">
               <div className="col">
@@ -256,8 +267,9 @@ export default class QuanLySV extends Component {
                 </button>
               ) : (
                 <button
+                  disabled={!enabled}
                   class="btn btn-outline-primary"
-                  onClick={this.handleAdd}
+                  onClick={this.handleSubmit}
                 >
                   Thêm Sinh Viên
                 </button>
@@ -266,7 +278,7 @@ export default class QuanLySV extends Component {
           </div>
         </form>
         <DanhSachSV
-          dssv={dsSV}
+          dsSV={dsSV}
           handleDelete={this.handleDelete}
           handleEdit={this.handleEdit}
         />
