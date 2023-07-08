@@ -15,14 +15,7 @@ export default class QuanLySV extends Component {
       soDT: "",
       email: "",
     },
-    dsSV: [
-      {
-        maSV: "",
-        hoTen: "",
-        soDT: "",
-        email: "",
-      },
-    ],
+    dsSV: [],
     editSV: null,
   };
 
@@ -85,7 +78,7 @@ export default class QuanLySV extends Component {
     this.setState({ value: newSV, error: newError });
   };
 
-  handleSubmit = (event) => {
+  handleAdd = (event) => {
     event.preventDefault();
 
     // xử lí validate form
@@ -103,7 +96,15 @@ export default class QuanLySV extends Component {
     });
     if (valid) {
       const newDSSV = [...this.state.dsSV, this.state.value];
-      this.setState({ dsSV: newDSSV });
+      this.setState({
+        dsSV: newDSSV,
+        value: {
+          maSV: "",
+          hoTen: "",
+          soDT: "",
+          email: "",
+        },
+      });
     }
   };
 
@@ -151,7 +152,11 @@ export default class QuanLySV extends Component {
         <div>
           <h3 className="p-2">Thông tin sinh viên</h3>
         </div>
-        <form onSubmit={this.handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <div className="m-3">
             <div className="row p-2">
               <div className="col">
@@ -250,7 +255,12 @@ export default class QuanLySV extends Component {
                   Cập nhật
                 </button>
               ) : (
-                <button class="btn btn-outline-primary">Thêm Sinh Viên</button>
+                <button
+                  class="btn btn-outline-primary"
+                  onClick={this.handleAdd}
+                >
+                  Thêm Sinh Viên
+                </button>
               )}
             </div>
           </div>

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 export default class DanhSachSV extends Component {
   render() {
     const { dssv, handleDelete, handleEdit } = this.props;
+
     return (
       <div className="bg-body-secondary m-3 border border-primary-subtle">
         <div>
